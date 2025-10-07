@@ -3,6 +3,8 @@ package model;
 import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,15 +28,22 @@ public class Usuario {
     private String correo;
     @Column(name="contrasena", nullable=false)
     private String contrasena;
-    @Column(name="rol", nullable=false)
-    private String rol;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol", nullable = false, length = 64)
+    private RolUsuario rol;
     @Column(name="fechaRegistro", insertable = false, updatable = false)
     private Timestamp fechaRegistro;
 
+    public enum RolUsuario {
+        Voluntario,
+        Administrador,
+        Coordinador
+    }
+    
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, String rol, Timestamp fechaRegistro) {
+    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, RolUsuario rol, Timestamp fechaRegistro) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
@@ -111,11 +120,11 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public String getRol() {
+    public RolUsuario getRol() {
         return rol;
     }
 
-    public void setRol(String rol) {
+    public void setRol(RolUsuario rol) {
         this.rol = rol;
     }
 
