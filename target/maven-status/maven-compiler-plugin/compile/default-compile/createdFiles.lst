@@ -1,2 +1,14 @@
-com\gestiononu\gestiononu\resources\JavaEE8Resource.class
-com\gestiononu\gestiononu\JAXRSConfiguration.class
+controller\ServletProyecto.class
+model\Usuario$RolUsuario.class
+model\Proyecto$EstadoProyecto.class
+dao\ParticipacionDao.class
+model\Proyecto.class
+model\Participacion.class
+model\Usuario.class
+controller\ServletParticipacion.class
+controller\ServletLogin.class
+controller\ServletLogin$1.class
+controller\ServletUsuario.class
+dao\UsuarioDao.class
+dao\ProyectoDao.class
+controller\ServletRegistro.class

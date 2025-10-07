@@ -1,36 +1,35 @@
 package model;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
-import javax.ejb.Timeout;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne; 
 import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.ManyToMany;
 
 @Entity
 @Table(name = "Participaciones")
-public class Participacion {
+public class Participacion implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idParticipacion;
-    
-    @OneToMany
+
+    @ManyToOne
     @JoinColumn(name = "idUsuario", referencedColumnName = "idUsuario")
     private Usuario usuario;
-    
-    @OneToMany
-    @JoinColumn(name="idProyecto", referencedColumnName = "idProyecto")
+
+    @ManyToOne
+    @JoinColumn(name = "idProyecto", referencedColumnName = "idProyecto")
     private Proyecto proyecto;
-    
+
     @Column(name = "horasTrabajadas", nullable = false)
     private Double horasTrabajadas;
-    
+
     @Column(name = "fechaRegistro", insertable = false, updatable = false)
     private Timestamp fechaRegistro;
 
@@ -83,6 +82,4 @@ public class Participacion {
     public void setFechaRegistro(Timestamp fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
-    
-    
 }

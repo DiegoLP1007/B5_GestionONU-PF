@@ -8,9 +8,9 @@ import javax.persistence.Persistence;
 import model.Participacion;
 
 public class ParticipacionDao {
+
     private EntityManagerFactory enti = Persistence.createEntityManagerFactory("gestionOnuPU");
 
-    
     public void guardar(Participacion participacion) {
         EntityManager admin = enti.createEntityManager();
         EntityTransaction transaccion = admin.getTransaction();
@@ -26,9 +26,9 @@ public class ParticipacionDao {
             admin.close();
         }
     }
-    
+
     public List<Participacion> listarTodos() {
-        String jpql = "SELECT p FROM Participaciones p";
+        String jpql = "SELECT p FROM Participacion p";
         EntityManager admin = enti.createEntityManager();
         try {
             return admin.createQuery(jpql, Participacion.class).getResultList();
@@ -36,7 +36,7 @@ public class ParticipacionDao {
             admin.close();
         }
     }
-    
+
     public Participacion buscarPorId(int id) {
         EntityManager admin = enti.createEntityManager();
         try {
@@ -45,8 +45,8 @@ public class ParticipacionDao {
             admin.close();
         }
     }
-    
-    public void Actualizar(Participacion participacion) {
+
+    public void actualizar(Participacion participacion) {
         EntityManager admin = enti.createEntityManager();
         EntityTransaction transaccion = admin.getTransaction();
         try {
@@ -61,8 +61,8 @@ public class ParticipacionDao {
             admin.close();
         }
     }
-    
-    public void Eliminar(int id) {
+
+    public void eliminar(int id) {
         EntityManager admin = enti.createEntityManager();
         EntityTransaction transaccion = admin.getTransaction();
         try {

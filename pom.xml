@@ -6,7 +6,7 @@
     <version>1.0</version>
     <packaging>war</packaging>
     <name>GestionOnu</name>
-    
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -15,18 +15,20 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <jakartaee>8.0</jakartaee>
     </properties>
-    
+
     <dependencies>
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.47</version>
+            <version>8.0.33</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
             <version>5.6.15.Final</version>
         </dependency>
+        
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextg</artifactId>
@@ -39,14 +41,13 @@
             <version>${jakartaee}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>6.21.0</version>
             <type>jar</type>
             <exclusions>
-                <!-- Excluimos las dependencias de Jackson que están causando conflictos con Glassfish -->
                 <exclusion>
                     <groupId>com.fasterxml.jackson.core</groupId>
                     <artifactId>jackson-core</artifactId>

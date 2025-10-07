@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,9 +22,9 @@ public class Proyecto {
     @Column (name ="descripcion", nullable = false)
     private String descripcion;
     @Column (name = "fechaInicio")
-    private LocalDate fechaInicio;
+    private Date fechaInicio;
     @Column (name = "fechaFin")
-    private LocalDate fechaFin;
+    private Date fechaFin;
     @Enumerated(EnumType.STRING)
     @Column(name = "estado", nullable = false, length = 64)
     private EstadoProyecto estado;
@@ -36,7 +37,7 @@ public class Proyecto {
     public Proyecto() {
     }
 
-    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin, EstadoProyecto estado) {
+    public Proyecto(String nombre, String descripcion, Date fechaInicio, Date fechaFin, EstadoProyecto estado) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
@@ -68,19 +69,19 @@ public class Proyecto {
         this.descripcion = descripcion;
     }
 
-    public LocalDate getFechaInicio() {
+    public Date getFechaInicio() {
         return fechaInicio;
     }
 
-    public void setFechaInicio(LocalDate fechaInicio) {
+    public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
 
-    public LocalDate getFechaFin() {
+    public Date getFechaFin() {
         return fechaFin;
     }
 
-    public void setFechaFin(LocalDate fechaFin) {
+    public void setFechaFin(Date fechaFin) {
         this.fechaFin = fechaFin;
     }
 

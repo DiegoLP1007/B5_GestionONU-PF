@@ -26,7 +26,7 @@ public class ProyectoDao {
     }
     
     public List<Proyecto> listarTodos() {
-        String jpql = "SELECT p FROM Proyectos p";
+        String jpql = "SELECT p FROM Proyecto p";
         EntityManager admin = enti.createEntityManager();
         try {
             return admin.createQuery(jpql, Proyecto.class).getResultList();
@@ -35,7 +35,7 @@ public class ProyectoDao {
         }
     }
     
-    public Proyecto buscarPorID(int id) {
+    public Proyecto buscarPorId(int id) {
         EntityManager admin = enti.createEntityManager();
         try {
             return admin.find(Proyecto.class, id);
@@ -44,7 +44,7 @@ public class ProyectoDao {
         }
     }
     
-    public void Actualizar (Proyecto proyecto) {
+    public void actualizarProyecto (Proyecto proyecto) {
         EntityManager admin =  enti.createEntityManager();
         EntityTransaction transaccion = admin.getTransaction();
         
@@ -59,7 +59,7 @@ public class ProyectoDao {
         }
     }
     
-    public void Eliminar (int id) {
+    public void eliminar(int id) {
         EntityManager admin = enti.createEntityManager();
         EntityTransaction transaccion = admin.getTransaction();
         try {
