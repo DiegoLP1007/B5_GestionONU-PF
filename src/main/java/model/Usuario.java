@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,13 +28,13 @@ public class Usuario {
     private String contrasena;
     @Column(name="rol", nullable=false)
     private String rol;
-    @Column(name="fechaRegistro", nullable=false)
-    private String fechaRegistro;
+    @Column(name="fechaRegistro", insertable = false, updatable = false)
+    private Timestamp fechaRegistro;
 
     public Usuario() {
     }
 
-    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, String rol, String fechaRegistro) {
+    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, String rol, Timestamp fechaRegistro) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
@@ -44,7 +45,7 @@ public class Usuario {
         this.fechaRegistro = fechaRegistro;
     }
 
-    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, String fechaRegistro) {
+    public Usuario(String nombre, String apellido, String direccion, String telefono, String correo, String contrasena, Timestamp fechaRegistro) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.direccion = direccion;
@@ -118,11 +119,11 @@ public class Usuario {
         this.rol = rol;
     }
 
-    public String getFechaRegistro() {
+    public Timestamp getFechaRegistro() {
         return fechaRegistro;
     }
 
-    public void setFechaRegistro(String fechaRegistro) {
+    public void setFechaRegistro(Timestamp fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
     }
     
