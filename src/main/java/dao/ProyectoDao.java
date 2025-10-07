@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -19,6 +20,16 @@ public class ProyectoDao {
             transaccion.commit();
         } catch (Exception e) {
             if (transaccion.isActive())  transaccion.rollback();
+        } finally {
+            admin.close();
+        }
+    }
+    
+    public List<Proyecto> listarTodos() {
+        String jpql = "SELECT p FROM Proyectos p";
+        EntityManager admin = enti.createEntityManager();
+        try {
+            return admin.createQuery(jpql, Proyecto.class).getResultList();
         } finally {
             admin.close();
         }
