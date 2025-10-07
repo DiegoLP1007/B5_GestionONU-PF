@@ -3,6 +3,8 @@ package model;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,13 +24,19 @@ public class Proyecto {
     private LocalDate fechaInicio;
     @Column (name = "fechaFin")
     private LocalDate fechaFin;
-    @Column (name ="estado", nullable = false)
-    private String estado;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado", nullable = false, length = 64)
+    private EstadoProyecto estado;
 
+    public enum EstadoProyecto{
+        Activo,
+        Finalizado
+    }
+    
     public Proyecto() {
     }
 
-    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin, String estado) {
+    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin, EstadoProyecto estado) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
@@ -76,11 +84,11 @@ public class Proyecto {
         this.fechaFin = fechaFin;
     }
 
-    public String getEstado() {
+    public EstadoProyecto getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
+    public void setEstado(EstadoProyecto estado) {
         this.estado = estado;
     }
     
