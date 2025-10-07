@@ -79,7 +79,6 @@ public class ServletUsuario extends HttpServlet {
     private void doAgregarUsuario(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            // Crear nuevo usuario desde los parámetros del formulario
             Usuario nuevo = new Usuario();
             nuevo.setNombre(request.getParameter("nombre"));
             nuevo.setApellido(request.getParameter("apellido"));
@@ -88,7 +87,6 @@ public class ServletUsuario extends HttpServlet {
             nuevo.setCorreo(request.getParameter("correo"));
             nuevo.setContrasena(request.getParameter("contrasena"));
 
-            // Asignar rol
             String rolStr = request.getParameter("rol");
             if (rolStr != null && !rolStr.isEmpty()) {
                 try {
@@ -99,10 +97,8 @@ public class ServletUsuario extends HttpServlet {
                 }
             }
 
-            // Guardar el usuario usando el DAO
             dao.guardar(nuevo);
 
-            // Redirigir a la lista
             response.sendRedirect("ServletUsuario?accion=listar");
 
         } catch (Exception e) {
