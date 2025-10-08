@@ -295,10 +295,6 @@
                     <span>Sistema ONG</span>
                 </div>
                 <div class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
-                        <i class='bx bx-home'></i>
-                        <span>Inicio</span>
-                    </a>
                     <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
                         <i class='bx bx-user'></i>
                         <span>Usuarios</span>

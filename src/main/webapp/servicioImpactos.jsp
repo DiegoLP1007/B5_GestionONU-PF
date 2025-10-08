@@ -296,10 +296,6 @@
                     <span>Sistema ONG</span>
                 </div>
                 <div class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
-                        <i class='bx bx-home'></i>
-                        <span>Inicio</span>
-                    </a>
                     <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
                         <i class='bx bx-user'></i>
                         <span>Usuarios</span>
@@ -330,11 +326,13 @@
         <div class="container">
             <div class="header">
                 <h1><i class='bx bx-bar-chart-alt-2'></i> Gestión de Impactos</h1>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="prepararModalAgregar()">
-                        <i class='bx bx-plus-circle'></i> Nuevo Impacto
-                    </button>
-                </div>
+                <c:if test="${rol != 'Voluntario'}">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="prepararModalAgregar()">
+                            <i class='bx bx-plus-circle'></i> Nuevo Impacto
+                        </button>
+                    </div>
+                </c:if>
             </div>
 
             <c:if test="${not empty errorAgregar}">
@@ -354,7 +352,9 @@
                             <th>Participantes</th>
                             <th>Horas Totales</th>
                             <th>Resultados</th>
-                            <th>Acciones</th>
+                                <c:if test="${rol != 'Voluntario'}">
+                                <th>Acciones</th>
+                                </c:if>
                         </tr>
                     </thead>
                     <tbody>
@@ -367,19 +367,25 @@
                                 <td>${i.participantes}</td>
                                 <td>${i.horasTotales}</td>
                                 <td>${i.resultados}</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-edit"
-                                                onclick="prepararModalEditar('${i.idImpacto}', '${i.proyecto.idProyecto}', '${i.fecha}', '${i.descripcion}', '${i.participantes}', '${i.horasTotales}', '${i.resultados}')">
-                                            <i class='bx bx-edit'></i> Editar
-                                        </button>
-                                        <a href="${pageContext.request.contextPath}/ServletImpacto?accion=eliminar&id=${i.idImpacto}"
-                                           class="btn btn-delete"
-                                           onclick="return confirm('¿Eliminar este impacto?')">
-                                            <i class='bx bx-trash'></i> Eliminar
-                                        </a>
-                                    </div>
-                                </td>
+                                <c:if test="${rol != 'Voluntario'}">
+                                    <td>
+                                        <div class="action-buttons">
+                                            <c:if test="${rol == 'Administrador' || rol == 'Coordinador'}">
+                                                <button class="btn btn-edit"
+                                                        onclick="prepararModalEditar('${i.idImpacto}', '${i.proyecto.idProyecto}', '${i.fecha}', '${i.descripcion}', '${i.participantes}', '${i.horasTotales}', '${i.resultados}')">
+                                                    <i class='bx bx-edit'></i> Editar
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${rol == 'Administrador'}">
+                                                <a href="${pageContext.request.contextPath}/ServletImpacto?accion=eliminar&id=${i.idImpacto}"
+                                                   class="btn btn-delete"
+                                                   onclick="return confirm('¿Eliminar este impacto?')">
+                                                    <i class='bx bx-trash'></i> Eliminar
+                                                </a>
+                                            </c:if>
+                                        </div>
+                                    </td>
+                                </c:if>
                             </tr>
                         </c:forEach>
                         <c:if test="${empty listarImpactos}">

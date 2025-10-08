@@ -1,7 +1,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.Participacion" %>
 <%@ page import="model.Usuario" %>
-<%@ page import="model.Proyecto" %>
+<%@ page import="model.Actividad" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -297,10 +297,6 @@
                     <span>Sistema ONG</span>
                 </div>
                 <div class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
-                        <i class='bx bx-home'></i>
-                        <span>Inicio</span>
-                    </a>
                     <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
                         <i class='bx bx-user'></i>
                         <span>Usuarios</span>
@@ -352,7 +348,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Usuario</th>
-                            <th>Proyecto</th>
+                            <th>Actividad</th>
                             <th>Horas Trabajadas</th>
                             <th>Fecha Registro</th>
                                 <c:if test="${rol != 'Voluntario'}">
@@ -365,18 +361,19 @@
                             <tr>
                                 <td><strong>#${p.idParticipacion}</strong></td>
                                 <td>${p.usuario.nombre} ${p.usuario.apellido}</td>
-                                <td>${p.proyecto.nombre}</td>
+                                <td>${p.actividad.nombre}</td>
                                 <td>${p.horasTrabajadas}</td>
                                 <td><fmt:formatDate value="${p.fechaRegistro}" pattern="dd/MM/yyyy HH:mm"/></td>
-                                <td>
-                                    <c:if test="${rol != 'Voluntario'}">
+                                <c:if test="${rol != 'Voluntario'}">
+                                    <td>
                                         <div class="action-buttons">
                                             <c:if test="${rol == 'Administrador' || rol == 'Coordinador'}">
                                                 <button class="btn btn-edit" 
-                                                        onclick="prepararModalEditar('${p.idParticipacion}', '${p.usuario.idUsuario}', '${p.proyecto.idProyecto}', '${p.horasTrabajadas}')">
+                                                        onclick="prepararModalEditar('${p.idParticipacion}', '${p.usuario.idUsuario}', '${p.actividad.idActividad}', '${p.horasTrabajadas}')">
                                                     <i class='bx bx-edit'></i> Editar
                                                 </button>
                                             </c:if>
+
                                             <c:if test="${rol == 'Administrador'}">
                                                 <a href="${pageContext.request.contextPath}/ServletParticipacion?accion=eliminar&id=${p.idParticipacion}" 
                                                    class="btn btn-delete" 
@@ -385,8 +382,8 @@
                                                 </a>
                                             </c:if>
                                         </div>
-                                    </c:if>
-                                </td>
+                                    </td>
+                                </c:if>
                             </tr>
                         </c:forEach>
                         <c:if test="${empty listarParticipaciones}">
@@ -423,10 +420,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="modalProyecto">Proyecto</label>
-                        <select name="idProyecto" id="modalProyecto" class="form-control" required>
-                            <c:forEach var="proyecto" items="${listarProyectos}">
-                                <option value="${proyecto.idProyecto}">${proyecto.nombre}</option>
+                        <label for="modalActividad">Actividad</label>
+                        <select name="idActividad" id="modalActividad" class="form-control" required>
+                            <c:forEach var="actividad" items="${listarActividades}">
+                                <option value="${actividad.idActividad}">${actividad.nombre}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -453,12 +450,12 @@
                 document.getElementById('participacionModal').classList.add('show');
             }
 
-            function prepararModalEditar(id, idUsuario, idProyecto, horas) {
+            function prepararModalEditar(id, idUsuario, idActividad, horas) {
                 document.getElementById('participacionModalLabel').innerText = 'Editar Participación #' + id;
                 document.getElementById('formAccion').value = 'actualizar';
                 document.getElementById('formIdParticipacion').value = id;
                 document.getElementById('modalUsuario').value = idUsuario;
-                document.getElementById('modalProyecto').value = idProyecto;
+                document.getElementById('modalActividad').value = idActividad;
                 document.getElementById('modalHoras').value = horas;
                 document.getElementById('participacionModal').classList.add('show');
             }

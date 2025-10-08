@@ -1,5 +1,6 @@
 package controller;
 
+import dao.ActividadDao;
 import dao.ParticipacionDao;
 import dao.ProyectoDao;
 import dao.UsuarioDao;
@@ -11,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Actividad;
 import model.Participacion;
 import model.Proyecto;
 import model.Usuario;
@@ -20,7 +22,7 @@ public class ServletParticipacion extends HttpServlet {
 
     private final ParticipacionDao dao = new ParticipacionDao();
     private final UsuarioDao usuarioDao = new UsuarioDao();
-    private final ProyectoDao proyectoDao = new ProyectoDao();
+    private final ActividadDao actividadDao = new ActividadDao();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -67,14 +69,14 @@ public class ServletParticipacion extends HttpServlet {
 
         List<Participacion> lista = dao.listarTodos();
         List<Usuario> usuarios = usuarioDao.listarUsuarios();
-        List<Proyecto> proyectos = proyectoDao.listarTodos();
+        List<Actividad> actividades = actividadDao.listarTodos();
 
         System.out.println("Usuarios encontrados: " + usuarios.size());
-        System.out.println("Proyectos encontrados: " + proyectos.size());
+        System.out.println("Proyectos encontrados: " + actividades.size());
 
         request.setAttribute("listarParticipaciones", lista);
         request.setAttribute("listarUsuarios", usuarios);
-        request.setAttribute("listarProyectos", proyectos);
+        request.setAttribute("listarActividades", actividades);
 
         request.getRequestDispatcher("servicioParticipaciones.jsp").forward(request, response);
     }
@@ -98,26 +100,31 @@ public class ServletParticipacion extends HttpServlet {
         String error = null;
         try {
             int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
-            int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+            int idActividad = Integer.parseInt(request.getParameter("idActividad"));
             Double horas = Double.parseDouble(request.getParameter("horasTrabajadas"));
 
             Usuario usuario = usuarioDao.buscarPorId(idUsuario);
-            Proyecto proyecto = proyectoDao.buscarPorId(idProyecto);
+            Actividad actividad = actividadDao.buscarPorId(idActividad);
 
             if (usuario == null) {
                 error = "Error: El usuario seleccionado no existe en la base de datos.";
-            } else if (proyecto == null) {
+            } else if (actividad == null) {
                 error = "Error: El proyecto seleccionado no existe en la base de datos.";
+            } else if (actividad.getCapacidad() <= 0) {
+                error = "Error: No hay capacidad disponible para esta actividad.";
             } else {
                 Participacion participacion = new Participacion();
                 participacion.setUsuario(usuario);
-                participacion.setProyecto(proyecto);
+                participacion.setActividad(actividad);
                 participacion.setHorasTrabajadas(horas);
                 participacion.setFechaRegistro(new Timestamp(System.currentTimeMillis()));
 
+                actividad.setCapacidad(actividad.getCapacidad() - 1);
+                actividadDao.actualizar(actividad); 
+
                 dao.guardar(participacion);
                 response.sendRedirect("ServletParticipacion?accion=listar");
-                return; 
+                return;
             }
 
         } catch (NumberFormatException e) {
@@ -130,7 +137,7 @@ public class ServletParticipacion extends HttpServlet {
             e.printStackTrace();
         }
         if (error != null) {
-            request.setAttribute("errorAgregar", error); 
+            request.setAttribute("errorAgregar", error);
         }
         doListarParticipaciones(request, response);
     }
@@ -143,19 +150,37 @@ public class ServletParticipacion extends HttpServlet {
 
             if (participacion != null) {
                 int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
-                int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                int idActividad = Integer.parseInt(request.getParameter("idActividad"));
                 Double horas = Double.parseDouble(request.getParameter("horasTrabajadas"));
 
                 Usuario usuario = usuarioDao.buscarPorId(idUsuario);
-                Proyecto proyecto = proyectoDao.buscarPorId(idProyecto);
+                Actividad actividadNueva = actividadDao.buscarPorId(idActividad);
+                Actividad actividadAnterior = participacion.getActividad();
 
-                participacion.setUsuario(usuario);
-                participacion.setProyecto(proyecto);
-                participacion.setHorasTrabajadas(horas);
+                if (actividadNueva != null) {
+                    if (!actividadAnterior.equals(actividadNueva)) {
+                        actividadAnterior.setCapacidad(actividadAnterior.getCapacidad() + 1);
+                        actividadDao.actualizar(actividadAnterior);
 
-                dao.actualizar(participacion);
+                        if (actividadNueva.getCapacidad() > 0) {
+                            actividadNueva.setCapacidad(actividadNueva.getCapacidad() - 1);
+                            actividadDao.actualizar(actividadNueva); 
+                        } else {
+                            request.setAttribute("errorAgregar", "No hay capacidad disponible para la nueva actividad.");
+                            doListarParticipaciones(request, response);
+                            return;
+                        }
+                    }
+
+                    participacion.setUsuario(usuario);
+                    participacion.setActividad(actividadNueva);
+                    participacion.setHorasTrabajadas(horas);
+
+                    dao.actualizar(participacion);
+                }
+
+                response.sendRedirect("ServletParticipacion?accion=listar");
             }
-            response.sendRedirect("ServletParticipacion?accion=listar");
         } catch (Exception e) {
             System.err.println("Error al actualizar participación: " + e.getMessage());
             e.printStackTrace();
@@ -167,7 +192,15 @@ public class ServletParticipacion extends HttpServlet {
             throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            dao.eliminar(id);
+            Participacion participacion = dao.buscarPorId(id);
+
+            if (participacion != null) {
+                Actividad actividad = participacion.getActividad();
+                actividad.setCapacidad(actividad.getCapacidad() + 1);
+                actividadDao.actualizar(actividad); 
+                dao.eliminar(id);  
+            }
+
             response.sendRedirect("ServletParticipacion?accion=listar");
         } catch (Exception e) {
             System.err.println("Error al eliminar participación: " + e.getMessage());

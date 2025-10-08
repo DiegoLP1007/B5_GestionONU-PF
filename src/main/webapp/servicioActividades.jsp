@@ -296,10 +296,6 @@
                     <span>Sistema ONG</span>
                 </div>
                 <div class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
-                        <i class='bx bx-home'></i>
-                        <span>Inicio</span>
-                    </a>
                     <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
                         <i class='bx bx-user'></i>
                         <span>Usuarios</span>
@@ -330,11 +326,13 @@
         <div class="container">
             <div class="header">
                 <h1><i class='bx bx-calendar-event'></i> Gestión de Actividades</h1>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="prepararModalAgregar()">
-                        <i class='bx bx-plus-circle'></i> Nueva Actividad
-                    </button>
-                </div>
+                <c:if test="${rol != 'Voluntario'}">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="prepararModalAgregar()">
+                            <i class='bx bx-plus-circle'></i> Nueva Actividad
+                        </button>
+                    </div>
+                </c:if>
             </div>
 
             <c:if test="${not empty errorAgregar}">
@@ -354,44 +352,52 @@
                             <th>Fecha</th>
                             <th>Capacidad</th>
                             <th>Proyecto</th>
-                            <th>Acciones</th>
+                                <c:if test="${rol != 'Voluntario'}">
+                                <th>Acciones</th>
+                                </c:if>
                         </tr>
                     </thead>
                     <tbody>
-                    <c:forEach var="a" items="${listarActividades}">
-                        <tr>
-                            <td><strong>#${a.idActividad}</strong></td>
-                            <td>${a.nombre}</td>
-                            <td>${a.descripcion}</td>
-                            <td>${a.lugar}</td>
-                            <td><fmt:formatDate value="${a.fecha}" pattern="yyyy-MM-dd"/></td>
-                        <td>${a.capacidad}</td>
-                        <td>${a.proyecto.nombre}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn btn-edit"
-                                        onclick="prepararModalEditar('${a.idActividad}', '${a.proyecto.idProyecto}', '${a.nombre}', '${a.descripcion}', '${a.lugar}', '${a.fecha}', '${a.capacidad}')">
-                                    <i class='bx bx-edit'></i> Editar
-                                </button>
-                                <a href="${pageContext.request.contextPath}/ServletActividad?accion=eliminar&id=${a.idActividad}"
-                                   class="btn btn-delete"
-                                   onclick="return confirm('¿Eliminar esta actividad?')">
-                                    <i class='bx bx-trash'></i> Eliminar
-                                </a>
-                            </div>
-                        </td>
-                        </tr>
-                    </c:forEach>
-                    <c:if test="${empty listarActividades}">
-                        <tr>
-                            <td colspan="8">
-                                <div class="empty-state">
-                                    <i class='bx bx-calendar-minus'></i>
-                                    <p>No hay actividades registradas</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </c:if>
+                        <c:forEach var="a" items="${listarActividades}">
+                            <tr>
+                                <td><strong>#${a.idActividad}</strong></td>
+                                <td>${a.nombre}</td>
+                                <td>${a.descripcion}</td>
+                                <td>${a.lugar}</td>
+                                <td><fmt:formatDate value="${a.fecha}" pattern="yyyy-MM-dd"/></td>
+                                <td>${a.capacidad}</td>
+                                <td>${a.proyecto.nombre}</td>
+                                <c:if test="${rol != 'Voluntario'}">
+                                    <td>
+                                        <div class="action-buttons">
+                                            <c:if test="${rol == 'Administrador' || rol == 'Coordinador'}">
+                                                <button class="btn btn-edit"
+                                                        onclick="prepararModalEditar('${a.idActividad}', '${a.proyecto.idProyecto}', '${a.nombre}', '${a.descripcion}', '${a.lugar}', '${a.fecha}', '${a.capacidad}')">
+                                                    <i class='bx bx-edit'></i> Editar
+                                                </button>
+                                            </c:if>
+                                            <c:if test="${rol == 'Administrador'}">
+                                                <a href="${pageContext.request.contextPath}/ServletActividad?accion=eliminar&id=${a.idActividad}"
+                                                   class="btn btn-delete"
+                                                   onclick="return confirm('¿Eliminar esta actividad?')">
+                                                    <i class='bx bx-trash'></i> Eliminar
+                                                </a>
+                                            </c:if>
+                                        </div>
+                                    </td>
+                                </c:if>
+                            </tr>
+                        </c:forEach>
+                        <c:if test="${empty listarActividades}">
+                            <tr>
+                                <td colspan="8">
+                                    <div class="empty-state">
+                                        <i class='bx bx-calendar-minus'></i>
+                                        <p>No hay actividades registradas</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </c:if>
                     </tbody>
                 </table>
             </div>

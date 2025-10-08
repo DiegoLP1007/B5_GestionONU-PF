@@ -295,10 +295,6 @@
                     <span>Sistema ONG</span>
                 </div>
                 <div class="nav-menu">
-                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
-                        <i class='bx bx-home'></i>
-                        <span>Inicio</span>
-                    </a>
                     <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item active">
                         <i class='bx bx-user'></i>
                         <span>Usuarios</span>
@@ -348,7 +344,7 @@
                             <th>Teléfono</th>
                             <th>Rol</th>
                             <th>Fecha Registro</th>
-                                <c:if test="${rol != 'Voluntario'}">
+                            <c:if test="${rol != 'Voluntario'}">
                                 <th>Acciones</th>
                                 </c:if>
                         </tr>

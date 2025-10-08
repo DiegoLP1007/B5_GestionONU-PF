@@ -13,6 +13,37 @@ public class UsuarioDao {
 
     private EntityManagerFactory enti = Persistence.createEntityManagerFactory("gestionOnuPU");
 
+    private static final String ADMIN_EMAIL = "admin@gestion.onu";
+    private static final String ADMIN_PASS = "admin123";
+
+    private static final Usuario.RolUsuario ADMIN_ROL = Usuario.RolUsuario.Administrador;
+
+    public UsuarioDao() {
+        inicializarAdminPorDefecto();
+    }
+
+    private void inicializarAdminPorDefecto() {
+        try {
+            if (!erorEmail(ADMIN_EMAIL)) {
+                Usuario admin = new Usuario();
+                admin.setNombre("Administrador");
+                admin.setApellido("Sistema");
+                admin.setDireccion("N/A");
+                admin.setTelefono("N/A");
+                admin.setCorreo(ADMIN_EMAIL);
+                admin.setContrasena(ADMIN_PASS);
+                admin.setRol(ADMIN_ROL);
+
+                guardar(admin);
+            } else {
+                System.out.println("La cuenta de administrador por defecto ya existe.");
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR: No se pudo inicializar la cuenta de administrador. Verifique la conexión a la base de datos o el 'persistence.xml'.");
+            e.printStackTrace();
+        }
+    }
+
     public void guardar(Usuario usuario) {
         EntityManager en = enti.createEntityManager();
         try {

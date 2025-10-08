@@ -32,13 +32,13 @@ public class ServletLogin extends HttpServlet {
 
             switch (usuario.getRol()) {
                 case Administrador:
-                    response.sendRedirect("servicioUsuarios.jsp");
+                    response.sendRedirect("ServletUsuario?accion=listar");
                     break;
                 case Coordinador:
-                    response.sendRedirect("servicioProyectos.jsp");
+                    response.sendRedirect("ServletImpacto?accion=listar");
                     break;
                 case Voluntario:
-                    response.sendRedirect("servicioParticipaciones.jsp");
+                    response.sendRedirect("ServletProyecto?accion=listar");
                     break;
                 default:
                     response.sendRedirect("index.jsp");

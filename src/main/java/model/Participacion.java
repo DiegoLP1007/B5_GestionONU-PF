@@ -24,8 +24,8 @@ public class Participacion implements Serializable {
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "idProyecto", referencedColumnName = "idProyecto")
-    private Proyecto proyecto;
+    @JoinColumn(name = "idActividad", referencedColumnName = "idActividad")
+    private Actividad actividad;
 
     @Column(name = "horasTrabajadas", nullable = false)
     private Double horasTrabajadas;
@@ -36,9 +36,9 @@ public class Participacion implements Serializable {
     public Participacion() {
     }
 
-    public Participacion(Usuario usuario, Proyecto proyecto, Double horasTrabajadas, Timestamp fechaRegistro) {
+    public Participacion(Usuario usuario, Actividad actividad, Double horasTrabajadas, Timestamp fechaRegistro) {
         this.usuario = usuario;
-        this.proyecto = proyecto;
+        this.actividad = actividad;
         this.horasTrabajadas = horasTrabajadas;
         this.fechaRegistro = fechaRegistro;
     }
@@ -59,12 +59,12 @@ public class Participacion implements Serializable {
         this.usuario = usuario;
     }
 
-    public Proyecto getProyecto() {
-        return proyecto;
+    public Actividad getActividad() {
+        return actividad;
     }
 
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
+    public void setActividad(Actividad actividad) {
+        this.actividad = actividad;
     }
 
     public Double getHorasTrabajadas() {
