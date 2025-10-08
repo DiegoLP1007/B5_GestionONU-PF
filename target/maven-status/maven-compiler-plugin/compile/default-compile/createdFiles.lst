@@ -8,6 +8,7 @@ model\Proyecto.class
 model\Participacion.class
 model\Actividad.class
 model\Usuario.class
+controller\ServletCerrarSesion.class
 controller\ServletParticipacion.class
 controller\ServletLogin.class
 dao\ActividadDao.class
