@@ -13,19 +13,110 @@
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
             body {
                 font-family: 'Inter', sans-serif;
                 background: #f5f5f5;
                 min-height: 100vh;
-                padding: 20px;
+                padding: 0;
             }
-            .container {
+
+            .navbar {
+                background: white;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .nav-container {
                 max-width: 1400px;
                 margin: 0 auto;
+                padding: 16px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .nav-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #5B68C4;
+                font-weight: 700;
+                font-size: 20px;
+            }
+
+            .nav-brand i {
+                font-size: 28px;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 8px;
+                flex: 1;
+                justify-content: center;
+            }
+
+            .nav-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 16px;
+                border-radius: 6px;
+                color: #666;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .nav-item:hover {
+                background: #f0f2ff;
+                color: #5B68C4;
+            }
+
+            .nav-item.active {
+                background: #5B68C4;
+                color: white;
+            }
+
+            .nav-item i {
+                font-size: 20px;
+            }
+
+            .btn-logout {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 16px;
+                background: #F44336;
+                color: white;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .btn-logout:hover {
+                background: #D32F2F;
+            }
+
+            .btn-logout i {
+                font-size: 20px;
+            }
+
+            .container {
+                max-width: 1400px;
+                margin: 20px auto;
                 background: white;
                 border-radius: 8px;
                 padding: 40px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
             .header {
                 display: flex;
@@ -67,7 +158,6 @@
                 overflow-x: auto;
                 border-radius: 8px;
                 border: 1px solid #e0e0e0;
-                margin-top: 20px;
             }
             table {
                 width: 100%;
@@ -78,9 +168,17 @@
                 background: #5B68C4;
                 color: white;
             }
-            th, td {
+            th {
                 padding: 16px;
                 text-align: left;
+                font-weight: 600;
+                font-size: 14px;
+                text-transform: uppercase;
+            }
+            td {
+                padding: 16px;
+                border-bottom: 1px solid #e0e0e0;
+                color: #555;
                 font-size: 14px;
             }
             tbody tr:hover {
@@ -111,11 +209,11 @@
             .modal {
                 display: none;
                 position: fixed;
-                top:0;
-                left:0;
-                width:100%;
-                height:100%;
-                background: rgba(0,0,0,0.5);
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
                 z-index: 1000;
                 align-items: center;
                 justify-content: center;
@@ -131,7 +229,7 @@
                 width: 90%;
                 max-height: 90vh;
                 overflow-y: auto;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
             }
             .modal-header {
                 margin-bottom: 30px;
@@ -161,6 +259,11 @@
                 outline: none;
                 border-color: #5B68C4;
             }
+            textarea.form-control {
+                min-height: 100px;
+                resize: vertical;
+                font-family: 'Inter', sans-serif;
+            }
             .modal-footer {
                 display: flex;
                 gap: 12px;
@@ -186,6 +289,44 @@
         </style>
     </head>
     <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class='bx bx-building-house'></i>
+                    <span>Sistema ONG</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
+                        <i class='bx bx-home'></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
+                        <i class='bx bx-user'></i>
+                        <span>Usuarios</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletProyecto?accion=listar" class="nav-item">
+                        <i class='bx bx-briefcase'></i>
+                        <span>Proyectos</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletActividad?accion=listar" class="nav-item active">
+                        <i class='bx bx-calendar'></i>
+                        <span>Actividades</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletParticipacion?accion=listar" class="nav-item">
+                        <i class='bx bx-group'></i>
+                        <span>Participaciones</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletImpacto?accion=listar" class="nav-item">
+                        <i class='bx bx-line-chart'></i>
+                        <span>Impactos</span>
+                    </a>
+                </div>
+                <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
+                    <i class='bx bx-log-out'></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </nav>
         <div class="container">
             <div class="header">
                 <h1><i class='bx bx-calendar-event'></i> Gestión de Actividades</h1>
@@ -217,40 +358,40 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="a" items="${listarActividades}">
-                            <tr>
-                                <td><strong>#${a.idActividad}</strong></td>
-                                <td>${a.nombre}</td>
-                                <td>${a.descripcion}</td>
-                                <td>${a.lugar}</td>
-                                <td><fmt:formatDate value="${a.fecha}" pattern="yyyy-MM-dd"/></td>
-                                <td>${a.capacidad}</td>
-                                <td>${a.proyecto.nombre}</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-edit"
-                                                onclick="prepararModalEditar('${a.idActividad}', '${a.proyecto.idProyecto}', '${a.nombre}', '${a.descripcion}', '${a.lugar}', '${a.fecha}', '${a.capacidad}')">
-                                            <i class='bx bx-edit'></i> Editar
-                                        </button>
-                                        <a href="${pageContext.request.contextPath}/ServletActividad?accion=eliminar&id=${a.idActividad}"
-                                           class="btn btn-delete"
-                                           onclick="return confirm('¿Eliminar esta actividad?')">
-                                            <i class='bx bx-trash'></i> Eliminar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty listarActividades}">
-                            <tr>
-                                <td colspan="8">
-                                    <div class="empty-state">
-                                        <i class='bx bx-calendar-minus'></i>
-                                        <p>No hay actividades registradas</p>
-                                    </div>
-                                </td>
-                            </tr>
-                        </c:if>
+                    <c:forEach var="a" items="${listarActividades}">
+                        <tr>
+                            <td><strong>#${a.idActividad}</strong></td>
+                            <td>${a.nombre}</td>
+                            <td>${a.descripcion}</td>
+                            <td>${a.lugar}</td>
+                            <td><fmt:formatDate value="${a.fecha}" pattern="yyyy-MM-dd"/></td>
+                        <td>${a.capacidad}</td>
+                        <td>${a.proyecto.nombre}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-edit"
+                                        onclick="prepararModalEditar('${a.idActividad}', '${a.proyecto.idProyecto}', '${a.nombre}', '${a.descripcion}', '${a.lugar}', '${a.fecha}', '${a.capacidad}')">
+                                    <i class='bx bx-edit'></i> Editar
+                                </button>
+                                <a href="${pageContext.request.contextPath}/ServletActividad?accion=eliminar&id=${a.idActividad}"
+                                   class="btn btn-delete"
+                                   onclick="return confirm('¿Eliminar esta actividad?')">
+                                    <i class='bx bx-trash'></i> Eliminar
+                                </a>
+                            </div>
+                        </td>
+                        </tr>
+                    </c:forEach>
+                    <c:if test="${empty listarActividades}">
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <i class='bx bx-calendar-minus'></i>
+                                    <p>No hay actividades registradas</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </c:if>
                     </tbody>
                 </table>
             </div>
