@@ -21,11 +21,97 @@
                 font-family: 'Inter', sans-serif;
                 background: #f5f5f5;
                 min-height: 100vh;
-                padding: 20px;
+                padding: 0;
             }
-            .container {
+
+            .navbar {
+                background: white;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .nav-container {
                 max-width: 1400px;
                 margin: 0 auto;
+                padding: 16px 40px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .nav-brand {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #5B68C4;
+                font-weight: 700;
+                font-size: 20px;
+            }
+
+            .nav-brand i {
+                font-size: 28px;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 8px;
+                flex: 1;
+                justify-content: center;
+            }
+
+            .nav-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 16px;
+                border-radius: 6px;
+                color: #666;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .nav-item:hover {
+                background: #f0f2ff;
+                color: #5B68C4;
+            }
+
+            .nav-item.active {
+                background: #5B68C4;
+                color: white;
+            }
+
+            .nav-item i {
+                font-size: 20px;
+            }
+
+            .btn-logout {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 10px 16px;
+                background: #F44336;
+                color: white;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+            }
+
+            .btn-logout:hover {
+                background: #D32F2F;
+            }
+
+            .btn-logout i {
+                font-size: 20px;
+            }
+
+            .container {
+                max-width: 1400px;
+                margin: 20px auto;
                 background: white;
                 border-radius: 8px;
                 padding: 40px;
@@ -66,13 +152,6 @@
             }
             .btn-primary:hover {
                 background: #4a56a8;
-            }
-            .btn-report {
-                background: #4CAF50;
-                color: white;
-            }
-            .btn-report:hover {
-                background: #45a049;
             }
             .table-wrapper {
                 overflow-x: auto;
@@ -179,6 +258,11 @@
                 outline: none;
                 border-color: #5B68C4;
             }
+            textarea.form-control {
+                min-height: 100px;
+                resize: vertical;
+                font-family: 'Inter', sans-serif;
+            }
             .modal-footer {
                 display: flex;
                 gap: 12px;
@@ -204,14 +288,55 @@
         </style>
     </head>
     <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <i class='bx bx-building-house'></i>
+                    <span>Sistema ONG</span>
+                </div>
+                <div class="nav-menu">
+                    <a href="${pageContext.request.contextPath}/index.jsp" class="nav-item">
+                        <i class='bx bx-home'></i>
+                        <span>Inicio</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletUsuario?accion=listar" class="nav-item">
+                        <i class='bx bx-user'></i>
+                        <span>Usuarios</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletProyecto?accion=listar" class="nav-item active">
+                        <i class='bx bx-briefcase'></i>
+                        <span>Proyectos</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletActividad?accion=listar" class="nav-item">
+                        <i class='bx bx-calendar'></i>
+                        <span>Actividades</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletParticipacion?accion=listar" class="nav-item">
+                        <i class='bx bx-group'></i>
+                        <span>Participaciones</span>
+                    </a>
+                    <a href="${pageContext.request.contextPath}/ServletImpacto?accion=listar" class="nav-item">
+                        <i class='bx bx-line-chart'></i>
+                        <span>Impactos</span>
+                    </a>
+                </div>
+                <a href="${pageContext.request.contextPath}/logout" class="btn-logout">
+                    <i class='bx bx-log-out'></i>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </nav>
+
         <div class="container">
             <div class="header">
                 <h1><i class='bx bx-briefcase'></i> Gestión de Proyectos</h1>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="prepararModalAgregar()">
-                        <i class='bx bx-plus-circle'></i> Nuevo Proyecto
-                    </button>
-                </div>
+                <c:if test="${rol != 'Voluntario'}">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="prepararModalAgregar()">
+                            <i class='bx bx-plus-circle'></i> Nuevo Proyecto
+                        </button>
+                    </div>
+                </c:if>
             </div>
 
             <div class="table-wrapper">
@@ -224,7 +349,9 @@
                             <th>Fecha Inicio</th>
                             <th>Fecha Fin</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                                <c:if test="${rol != 'Voluntario'}">
+                                <th>Acciones</th>
+                                </c:if>
                         </tr>
                     </thead>
                     <tbody>
@@ -233,22 +360,29 @@
                                 <td><strong>#${proyecto.idProyecto}</strong></td>
                                 <td>${proyecto.nombre}</td>
                                 <td>${proyecto.descripcion}</td>
-                                <td><fmt:formatDate value="${proyecto.fechaInicio}" pattern="yyyy-MM-dd"/></td>
-                                <td><fmt:formatDate value="${proyecto.fechaFin}" pattern="yyyy-MM-dd"/></td>
+                                <td><fmt:formatDate value="${proyecto.fechaInicio}" pattern="dd/MM/yyyy"/></td>
+                                <td><fmt:formatDate value="${proyecto.fechaFin}" pattern="dd/MM/yyyy"/></td>
                                 <td>${proyecto.estado}</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-edit"
-                                                onclick="prepararModalEditar('${proyecto.idProyecto}', '${proyecto.nombre}', '${proyecto.descripcion}', '${proyecto.fechaInicio}', '${proyecto.fechaFin}', '${proyecto.estado}')">
-                                            <i class='bx bx-edit'></i> Editar
-                                        </button>
-                                        <a href="${pageContext.request.contextPath}/ServletProyecto?accion=eliminar&id=${proyecto.idProyecto}" 
-                                           class="btn btn-delete" 
-                                           onclick="return confirm('¿Eliminar este proyecto?')">
-                                            <i class='bx bx-trash'></i> Eliminar
-                                        </a>
-                                    </div>
-                                </td>
+                                <c:if test="${rol != 'Voluntario'}">
+                                    <td>
+                                        <div class="action-buttons">
+                                            <c:if test="${rol == 'Administrador' || rol == 'Coordinador'}">
+                                                <button class="btn btn-edit"
+                                                        onclick="prepararModalEditar('${proyecto.idProyecto}', '${proyecto.nombre}', '${proyecto.descripcion}', '<fmt:formatDate value="${proyecto.fechaInicio}" pattern="yyyy-MM-dd"/>', '<fmt:formatDate value="${proyecto.fechaFin}" pattern="yyyy-MM-dd"/>', '${proyecto.estado}')">
+                                                    <i class='bx bx-edit'></i> Editar
+                                                </button>
+                                            </c:if>
+
+                                            <c:if test="${rol == 'Administrador'}">
+                                                <a href="${pageContext.request.contextPath}/ServletProyecto?accion=eliminar&id=${proyecto.idProyecto}" 
+                                                   class="btn btn-delete" 
+                                                   onclick="return confirm('¿Eliminar este proyecto?')">
+                                                    <i class='bx bx-trash'></i> Eliminar
+                                                </a>
+                                            </c:if>
+                                        </div>
+                                    </td>
+                                </c:if>
                             </tr>
                         </c:forEach>
                         <c:if test="${empty listarProyectos}">
